@@ -13,9 +13,9 @@ export default async function DashboardPage() {
   `);
   const stats = statsRes.rows[0];
 
-  const totalOrders = stats?.totalOrders || 0;
-  const totalSales = stats?.totalSales || 0;
-  const uniqueClients = stats?.uniqueClients || 0;
+  const totalOrders = Number(stats?.totalOrders) || 0;
+  const totalSales = Number(stats?.totalSales) || 0;
+  const uniqueClients = Number(stats?.uniqueClients) || 0;
 
   const recentOrdersRes = await db.execute(`
     SELECT id, orderNumber, customerName, total, status, createdAt
@@ -104,14 +104,14 @@ export default async function DashboardPage() {
         ) : (
           <ul className="divide-y divide-gray-200">
             {recentOrders.map(order => (
-              <li key={order.id} className="p-4 flex items-center justify-between">
+              <li key={order.id as string} className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="font-bold text-gray-900">#{order.orderNumber || order.id.slice(4,8)} - {order.customerName}</p>
-                  <p className="text-sm text-gray-500">{order.createdAt}</p>
+                  <p className="font-bold text-gray-900">#{Number(order.orderNumber) || (order.id as string).slice(4,8)} - {order.customerName as string}</p>
+                  <p className="text-sm text-gray-500">{order.createdAt as string}</p>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  <span className="font-bold text-gray-900">R$ {order.total.toFixed(2)}</span>
-                  {formatStatus(order.status)}
+                  <span className="font-bold text-gray-900">R$ {Number(order.total).toFixed(2)}</span>
+                  {formatStatus(order.status as string)}
                 </div>
               </li>
             ))}

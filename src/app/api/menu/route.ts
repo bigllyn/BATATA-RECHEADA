@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
           sql: 'INSERT INTO Category (id, name, restaurantId) VALUES (?, ?, ?)',
           args: [catId, categoryName, 'rest_1']
         });
-        category = { id: catId };
+        category = { id: catId } as any;
       }
       
       const prodId = 'prod_' + randomUUID();

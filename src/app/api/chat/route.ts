@@ -9,12 +9,12 @@ export async function POST(req: NextRequest) {
   try {
     const { message, history } = await req.json();
 
-    // Fetch the menu from DB to give context to the AI
-    const products = db.prepare('SELECT p.name, p.description, p.price, c.name as categoryName FROM Product p JOIN Category c ON p.categoryId = c.id').all() as any[];
+    const productsRes = await db.execute('SELECT p.name, p.description, p.price, c.name as categoryName FROM Product p JOIN Category c ON p.categoryId = c.id');
+    const products = productsRes.rows;
     
     let menuContext = "Você é o atendente virtual do restaurante Gourmet Bites. Seja educado, rápido e focado em vender.\n\nNOSSO CARDÁPIO ATUAL:\n";
     for (const p of products) {
-      menuContext += `- ${p.name} (${p.categoryName}): R$ ${p.price.toFixed(2)}. ${p.description || ''}\n`;
+      menuContext += `- ${p.name} (${p.categoryName}): R$ ${Number(p.price).toFixed(2)}. ${p.description || ''}\n`;
     }
     menuContext += "\nRegras: 1. Responda de forma curta como no WhatsApp. 2. Se o cliente quiser pedir, diga que ele pode pedir pelo link: http://localhost:3000/gourmet-bites ou você mesmo pode anotar. 3. Sugira sempre um item a mais (upsell).";
 
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         ]
       });
 
-      return NextResponse.json({ reply: response.text() });
+      return NextResponse.json({ reply: response.text });
     } catch (apiError) {
       console.warn("API key might be missing", apiError);
       

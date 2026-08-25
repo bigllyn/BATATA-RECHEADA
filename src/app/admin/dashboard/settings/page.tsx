@@ -12,9 +12,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     getSettings().then(data => {
-      if (data && data.pixKey) {
-        setPixKey(data.pixKey);
-      }
+      setPixKey(String(data.pixKey || ""));
       setIsLoading(false);
     });
   }, []);

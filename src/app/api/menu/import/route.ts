@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
         }
       });
       
-      const jsonText = response.text();
+      const jsonText = response.text;
       extractedItems = JSON.parse(jsonText || "[]");
       
     } catch (apiError) {
@@ -81,32 +81,37 @@ export async function POST(req: NextRequest) {
     
     // Process and insert into database
     // Using transaction would be better, but doing it simply for the prototype
-    db.exec('BEGIN TRANSACTION');
+    const tx = await db.transaction('write');
     try {
       for (const item of extractedItems) {
         // Find or create category
-        let catStmt = db.prepare('SELECT id FROM Category WHERE name = ? COLLATE NOCASE');
-        let category = catStmt.get(item.category) as { id: string } | undefined;
+        let categoryRes = await tx.execute({
+          sql: 'SELECT id FROM Category WHERE LOWER(name) = LOWER(?)',
+          args: [item.category]
+        });
+        let category = categoryRes.rows[0];
         
         if (!category) {
           const catId = 'cat_' + randomUUID();
-          db.prepare('INSERT INTO Category (id, name, restaurantId) VALUES (?, ?, ?)').run(
-            catId, item.category, 'rest_1'
-          );
-          category = { id: catId };
+          await tx.execute({
+            sql: 'INSERT INTO Category (id, name, restaurantId) VALUES (?, ?, ?)',
+            args: [catId, item.category, 'rest_1']
+          });
+          category = { id: catId } as any;
         }
         
         // Insert product
         const prodId = 'prod_' + randomUUID();
-        db.prepare('INSERT INTO Product (id, name, description, price, categoryId) VALUES (?, ?, ?, ?, ?)').run(
-          prodId, item.name, item.description || null, item.price, category.id
-        );
+        await tx.execute({
+          sql: 'INSERT INTO Product (id, name, description, price, categoryId) VALUES (?, ?, ?, ?, ?)',
+          args: [prodId, item.name, item.description || null, item.price, category.id]
+        });
         
         itemsAdded++;
       }
-      db.exec('COMMIT');
+      await tx.commit();
     } catch (e) {
-      db.exec('ROLLBACK');
+      await tx.rollback();
       throw e;
     }
     

@@ -42,7 +42,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
           sql: 'INSERT INTO Category (id, name, restaurantId) VALUES (?, ?, ?)',
           args: [catId, categoryName, 'rest_1']
         });
-        category = { id: catId };
+        category = { id: catId } as any;
       }
       
       await tx.execute({
