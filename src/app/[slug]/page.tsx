@@ -32,7 +32,26 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
     setCart([...cart, product]);
   };
 
+  const decreaseQuantity = (productId: string) => {
+    const index = cart.findIndex(item => item.id === productId);
+    if (index > -1) {
+      const newCart = [...cart];
+      newCart.splice(index, 1);
+      setCart(newCart);
+    }
+  };
+
+  const removeFromCart = (productId: string) => {
+    setCart(cart.filter(item => item.id !== productId));
+  };
+
   const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  useEffect(() => {
+    if (cart.length === 0 && isCheckoutModalOpen) {
+      setIsCheckoutModalOpen(false);
+    }
+  }, [cart.length, isCheckoutModalOpen]);
 
   const handleOpenCheckout = () => {
     if (cart.length === 0) return;
@@ -145,7 +164,7 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
               }}
               className={`flex flex-col items-center gap-2 min-w-max transition-opacity ${activeCategory === "Todos" ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
             >
-              <span className="text-2xl">🍔</span>
+              <span className="text-2xl">📋</span>
               <span className={`text-sm ${activeCategory === "Todos" ? 'font-bold border-b-2 border-black pb-1' : 'font-medium pb-1'}`}>Todos</span>
             </button>
             {categories.map((cat: any) => (
@@ -265,9 +284,46 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
                 {/* Resumo */}
                 <div>
                   <h4 className="font-bold text-sm text-gray-500 uppercase tracking-wider mb-2">Resumo</h4>
-                  <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100 font-bold">
-                    <span>{cart.length} itens</span>
-                    <span className="text-green-700 text-lg">R$ {total.toFixed(2)}</span>
+                  
+                  <div className="bg-gray-50 rounded-lg border border-gray-100 p-2 space-y-2 mb-2">
+                    {Object.values(cart.reduce((acc, item) => {
+                      acc[item.id] = acc[item.id] || { ...item, quantity: 0 };
+                      acc[item.id].quantity += 1;
+                      return acc;
+                    }, {} as any)).map((item: any, idx) => (
+                      <div key={idx} className="flex justify-between items-center text-sm bg-white p-2 rounded border border-gray-100 shadow-sm">
+                        
+                        {/* Ações de Quantidade */}
+                        <div className="flex items-center gap-2 mr-3">
+                          <button type="button" onClick={() => decreaseQuantity(item.id)} className="w-6 h-6 bg-red-100 text-red-600 rounded-md flex items-center justify-center font-bold hover:bg-red-200">-</button>
+                          <span className="font-bold text-gray-700 min-w-[12px] text-center">{item.quantity}</span>
+                          <button type="button" onClick={() => addToCart(item)} className="w-6 h-6 bg-green-100 text-green-700 rounded-md flex items-center justify-center font-bold hover:bg-green-200">+</button>
+                        </div>
+                        
+                        {/* Nome do Produto */}
+                        <div className="flex-1 font-medium text-gray-800 leading-snug">
+                          {item.name}
+                        </div>
+                        
+                        {/* Preço e Lixeira */}
+                        <div className="flex items-center gap-3">
+                          <span className="text-gray-600 font-bold whitespace-nowrap">R$ {(item.price * item.quantity).toFixed(2)}</span>
+                          <button type="button" onClick={() => removeFromCart(item.id)} className="text-gray-400 hover:text-red-500 transition-colors">
+                            <X size={16} className="opacity-70" />
+                          </button>
+                        </div>
+
+                      </div>
+                    ))}
+                    
+                    {cart.length === 0 && (
+                      <div className="text-center py-4 text-gray-500 text-sm">Seu carrinho está vazio.</div>
+                    )}
+                  </div>
+
+                  <div className="flex justify-between items-center p-2 font-bold">
+                    <span className="text-gray-700">Total a pagar:</span>
+                    <span className="text-green-700 text-xl">R$ {total.toFixed(2)}</span>
                   </div>
                 </div>
 
