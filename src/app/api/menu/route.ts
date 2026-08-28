@@ -21,10 +21,8 @@ export async function POST(req: NextRequest) {
     if (image && image.size > 0) {
       const bytes = await image.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const filename = `${Date.now()}-${image.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-      const filepath = path.join(process.cwd(), "public/uploads", filename);
-      await writeFile(filepath, buffer);
-      imageUrl = `/uploads/${filename}`;
+      const mimeType = image.type || 'image/jpeg';
+      imageUrl = `data:${mimeType};base64,${buffer.toString('base64')}`;
     }
 
     const tx = await db.transaction('write');
