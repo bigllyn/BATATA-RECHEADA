@@ -124,7 +124,7 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
   }, {});
 
   return (
-    <div className={`min-h-screen pb-24 font-sans relative max-w-md mx-auto shadow-2xl overflow-hidden ${viewMode === 'home' ? 'bg-gradient-to-b from-[#4A0000] to-[#110000] text-white' : 'bg-gray-50 text-gray-900'}`}>
+    <div className={`min-h-screen pb-24 font-sans relative w-full md:max-w-md mx-auto shadow-2xl overflow-hidden ${viewMode === 'home' ? 'bg-gradient-to-b from-[#4A0000] to-[#110000] text-white' : 'bg-gray-50 text-gray-900'}`}>
       
       {/* Header - Only in menu mode */}
       {viewMode === "menu" && (
@@ -163,14 +163,14 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
       {/* Main Content */}
       <main className="w-full flex flex-col items-center">
         {viewMode === "home" ? (
-          <div className="w-full flex flex-col items-center px-6 pt-12">
+          <div className="w-full flex flex-col items-center px-4 pt-12 pb-8">
             {/* Logo */}
-            <div className="w-64 h-64 mb-10 flex items-center justify-center drop-shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className="w-64 h-64 sm:w-72 sm:h-72 mb-10 flex items-center justify-center drop-shadow-[0_0_20px_rgba(0,0,0,0.5)]">
               <img src="/logo.jpg" alt="Batata do Chef" className="w-full h-full object-contain rounded-full border-2 border-yellow-500/20" />
             </div>
 
             {/* Grid of Categories */}
-            <div className="grid grid-cols-2 gap-4 w-full max-w-sm relative z-10">
+            <div className="grid grid-cols-2 gap-4 w-full relative z-10 max-w-[400px]">
               {["BATATA", "BEBIDAS", "ADICIONAIS", "SOBREMESA"].map((catName) => {
                 // Inline SVGs for pure black icons
                 let iconSvg = <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>;
@@ -197,10 +197,10 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
                       setViewMode("menu");
                       window.scrollTo(0, 0);
                     }}
-                    className="bg-gradient-to-b from-[#FFE370] to-[#E5AB00] text-black p-5 rounded-2xl flex flex-col items-center justify-center gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.5)] border-2 border-[#FFE370] hover:scale-105 transition-transform active:scale-95"
+                    className="bg-gradient-to-b from-[#FFE370] to-[#E5AB00] text-black w-full aspect-square rounded-[2rem] flex flex-col items-center justify-center gap-4 shadow-[0_4px_15px_rgba(0,0,0,0.5)] border border-[#FFE370] hover:scale-105 transition-transform active:scale-95"
                   >
-                    <div className="text-black drop-shadow-sm">{iconSvg}</div>
-                    <span className="font-extrabold text-[15px] tracking-tight">{catName}</span>
+                    <div className="text-black drop-shadow-sm scale-110">{iconSvg}</div>
+                    <span className="font-extrabold text-[15px] sm:text-[17px] tracking-tight">{catName}</span>
                   </button>
                 )
               })}
