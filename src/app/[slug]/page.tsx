@@ -123,156 +123,165 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
     return acc;
   }, {});
 
-  if (viewMode === "home") {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-red-900 to-black font-sans text-white relative max-w-md mx-auto shadow-2xl overflow-hidden flex flex-col items-center justify-center px-6">
-        
-        {/* Logo */}
-        <div className="w-56 h-56 mb-10 rounded-full overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)] border-4 border-yellow-500/20 bg-black flex items-center justify-center">
-          <img src="/logo.jpg" alt="Batata do Chef" className="w-full h-full object-cover" />
-        </div>
-
-        {/* Grid of Categories */}
-        <div className="grid grid-cols-2 gap-4 w-full max-w-sm relative z-10">
-          {["BATATA", "BEBIDAS", "ADICIONAIS", "SOBREMESA"].map((catName) => {
-            let icon = "🍟";
-            if (catName === "BEBIDAS") icon = "🥤";
-            if (catName === "ADICIONAIS") icon = "➕";
-            if (catName === "SOBREMESA") icon = "🍨";
-            
-            return (
-              <button
-                key={catName}
-                onClick={() => {
-                  setActiveCategory(catName);
-                  setViewMode("menu");
-                  window.scrollTo(0, 0);
-                }}
-                className="bg-gradient-to-b from-yellow-400 to-yellow-500 text-black p-6 rounded-2xl flex flex-col items-center justify-center gap-3 shadow-lg hover:scale-105 transition-transform active:scale-95 border-b-4 border-yellow-600"
-              >
-                <span className="text-4xl">{icon}</span>
-                <span className="font-extrabold text-[13px] tracking-wide">{catName}</span>
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Footer Info */}
-        <div className="mt-16 text-xs text-white/50 font-medium">
-          Powered by Anota AI - {restaurant?.name}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 pb-24 font-sans text-gray-900 relative max-w-md mx-auto shadow-2xl overflow-hidden">
+    <div className={`min-h-screen pb-24 font-sans relative max-w-md mx-auto shadow-2xl overflow-hidden ${viewMode === 'home' ? 'bg-gradient-to-b from-[#4A0000] to-[#110000] text-white' : 'bg-gray-50 text-gray-900'}`}>
       
-      {/* Header */}
-      <header className="px-5 pt-6 pb-2 bg-white sticky top-0 z-10 shadow-sm">
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-3">
-            <button 
-              onClick={() => setViewMode("home")}
-              className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-700 hover:bg-gray-200 transition-colors"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            </button>
-            <h1 className="text-xl font-bold">{restaurant.name}</h1>
-          </div>
-          <div className="flex items-center text-sm font-medium text-gray-600">
-            <MapPin size={16} className="mr-1" />
-            Delivery
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative mb-2">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search size={18} className="text-gray-400" />
-          </div>
-          <input
-            ref={searchInputRef}
-            type="text"
-            className="block w-full pl-10 pr-3 py-2.5 border-none rounded-xl leading-5 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#6a1b9a] sm:text-sm transition-all"
-            placeholder="Buscar pratos..."
-          />
-        </div>
-      </header>
-
-      <main>
-        {/* Categories */}
-        <div className="px-5 mb-6 mt-4 overflow-x-auto no-scrollbar sticky top-[108px] bg-gray-50 z-10 py-2 border-b border-gray-200">
-          <div className="flex gap-6">
-            <button 
-              onClick={() => {
-                setActiveCategory("Todos");
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className={`flex flex-col items-center gap-2 min-w-max transition-opacity ${activeCategory === "Todos" ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
-            >
-              <span className="text-2xl">📋</span>
-              <span className={`text-sm ${activeCategory === "Todos" ? 'font-bold border-b-2 border-black pb-1' : 'font-medium pb-1'}`}>Todos</span>
-            </button>
-            {categories.map((cat: any) => (
+      {/* Header - Only in menu mode */}
+      {viewMode === "menu" && (
+        <header className="px-5 pt-6 pb-2 bg-white sticky top-0 z-10 shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center gap-3">
               <button 
-                key={cat.id}
-                onClick={() => {
-                  setActiveCategory(cat.name);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className={`flex flex-col items-center gap-2 min-w-max transition-opacity ${activeCategory === cat.name ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+                onClick={() => setViewMode("home")}
+                className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-700 hover:bg-gray-200 transition-colors"
               >
-                <span className="text-2xl">{cat.icon || '🍽️'}</span>
-                <span className={`text-sm ${activeCategory === cat.name ? 'font-bold border-b-2 border-black pb-1' : 'font-medium pb-1'}`}>{cat.name}</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               </button>
-            ))}
+              <h1 className="text-xl font-bold">{restaurant.name}</h1>
+            </div>
+            <div className="flex items-center text-sm font-medium text-gray-600">
+              <MapPin size={16} className="mr-1" />
+              Delivery
+            </div>
           </div>
-        </div>
 
-        {/* Menu Items */}
-        <div className="px-5 space-y-8">
-          {products.length === 0 && <p className="text-gray-500 text-sm">Nenhum produto cadastrado.</p>}
+          {/* Search Bar */}
+          <div className="relative mb-2">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search size={18} className="text-gray-400" />
+            </div>
+            <input
+              ref={searchInputRef}
+              type="text"
+              className="block w-full pl-10 pr-3 py-2.5 border-none rounded-xl leading-5 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#6a1b9a] sm:text-sm transition-all"
+              placeholder="Buscar pratos..."
+            />
+          </div>
+        </header>
+      )}
 
-          {categories.map((cat: any) => {
-            if (activeCategory !== "Todos" && activeCategory !== cat.name) return null;
-            
-            const catProducts = productsByCategory[cat.name];
-            if (!catProducts || catProducts.length === 0) return null;
+      {/* Main Content */}
+      <main className="w-full flex flex-col items-center">
+        {viewMode === "home" ? (
+          <div className="w-full flex flex-col items-center px-6 pt-12">
+            {/* Logo */}
+            <div className="w-64 h-64 mb-10 flex items-center justify-center drop-shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+              <img src="/logo.jpg" alt="Batata do Chef" className="w-full h-full object-contain rounded-full border-2 border-yellow-500/20" />
+            </div>
 
-            return (
-              <div key={cat.id} id={`category-${cat.id}`} className="scroll-mt-40">
-                <h2 className="text-xl font-bold mb-4">{cat.name}</h2>
-                <div className="space-y-4">
-                  {catProducts.map((product: any) => (
-                    <div key={product.id} className="flex gap-4 bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
-                      <div className="w-24 h-24 flex-shrink-0 bg-gray-200 rounded-xl overflow-hidden flex items-center justify-center text-gray-400 text-xs">
-                        {product.imageUrl ? <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" /> : "Sem foto"}
-                      </div>
-                      <div className="flex-1 flex flex-col justify-between">
-                        <div>
-                          <div className="flex justify-between items-start">
-                            <h3 className="font-bold text-gray-900 leading-tight pr-2">{product.name}</h3>
-                            <span className="font-bold text-gray-900 whitespace-nowrap">R$ {product.price.toFixed(2)}</span>
-                          </div>
-                          {product.description && <p className="text-xs text-gray-500 mt-1 line-clamp-2">{product.description}</p>}
-                        </div>
-                        <div className="flex justify-between items-center mt-2">
-                          <button onClick={() => addToCart(product)} className="bg-green-700 text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-green-800 transition-colors">
-                            Adicionar
-                          </button>
-                          <button onClick={() => addToCart(product)} className="w-7 h-7 bg-green-700 text-white rounded-lg flex items-center justify-center hover:bg-green-800 transition-colors">
-                            <Plus size={16} />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            {/* Grid of Categories */}
+            <div className="grid grid-cols-2 gap-4 w-full max-w-sm relative z-10">
+              {["BATATA", "BEBIDAS", "ADICIONAIS", "SOBREMESA"].map((catName) => {
+                // Inline SVGs for pure black icons
+                let iconSvg = <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>;
+                
+                if (catName === "BATATA") {
+                  // French Fries SVG
+                  iconSvg = <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 21h8l2-10H6l2 10z"/><path d="M9 11V3"/><path d="M12 11V4"/><path d="M15 11V3"/><path d="M7 11V5"/><path d="M17 11V5"/></svg>;
+                } else if (catName === "BEBIDAS") {
+                  // Bottle/Drink SVG
+                  iconSvg = <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 2v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2H10z"/><path d="M10 6c0 1.5-1.5 3-1.5 5v11h7V11c0-2-1.5-3.5-1.5-5"/><path d="M14 10h5a1 1 0 0 1 1 1v11h-7"/></svg>;
+                } else if (catName === "ADICIONAIS") {
+                  // Bowl/Extras SVG
+                  iconSvg = <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12a8 8 0 0 0 16 0"/><path d="M2 12h20"/><path d="M12 2v4"/><path d="M8 4l2 3"/><path d="M16 4l-2 3"/></svg>;
+                } else if (catName === "SOBREMESA") {
+                  // Ice Cream/Dessert SVG
+                  iconSvg = <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m14 11-4-8-4 8h8z"/><path d="M6 11a6 6 0 0 0 12 0H6z"/><path d="M12 21v-4"/><path d="M9 21h6"/></svg>;
+                }
+
+                return (
+                  <button
+                    key={catName}
+                    onClick={() => {
+                      setActiveCategory(catName);
+                      setViewMode("menu");
+                      window.scrollTo(0, 0);
+                    }}
+                    className="bg-gradient-to-b from-[#FFE370] to-[#E5AB00] text-black p-5 rounded-2xl flex flex-col items-center justify-center gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.5)] border-2 border-[#FFE370] hover:scale-105 transition-transform active:scale-95"
+                  >
+                    <div className="text-black drop-shadow-sm">{iconSvg}</div>
+                    <span className="font-extrabold text-[15px] tracking-tight">{catName}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ) : (
+          <div className="w-full">
+            {/* Categories Horizontal */}
+            <div className="px-5 mb-6 mt-4 overflow-x-auto no-scrollbar sticky top-[108px] bg-gray-50 z-10 py-2 border-b border-gray-200">
+              <div className="flex gap-6">
+                <button 
+                  onClick={() => {
+                    setActiveCategory("Todos");
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className={`flex flex-col items-center gap-2 min-w-max transition-opacity ${activeCategory === "Todos" ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+                >
+                  <span className="text-2xl">📋</span>
+                  <span className={`text-sm ${activeCategory === "Todos" ? 'font-bold border-b-2 border-black pb-1' : 'font-medium pb-1'}`}>Todos</span>
+                </button>
+                {categories.map((cat: any) => (
+                  <button 
+                    key={cat.id}
+                    onClick={() => {
+                      setActiveCategory(cat.name);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className={`flex flex-col items-center gap-2 min-w-max transition-opacity ${activeCategory === cat.name ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+                  >
+                    <span className="text-2xl">{cat.icon || '🍽️'}</span>
+                    <span className={`text-sm ${activeCategory === cat.name ? 'font-bold border-b-2 border-black pb-1' : 'font-medium pb-1'}`}>{cat.name}</span>
+                  </button>
+                ))}
               </div>
-            );
-          })}
-        </div>
+            </div>
+
+            {/* Menu Items */}
+            <div className="px-5 space-y-8">
+              {products.length === 0 && <p className="text-gray-500 text-sm">Nenhum produto cadastrado.</p>}
+
+              {categories.map((cat: any) => {
+                if (activeCategory !== "Todos" && activeCategory !== cat.name) return null;
+                
+                const catProducts = productsByCategory[cat.name];
+                if (!catProducts || catProducts.length === 0) return null;
+
+                return (
+                  <div key={cat.id} id={`category-${cat.id}`} className="scroll-mt-40">
+                    <h2 className="text-xl font-bold mb-4 text-gray-900">{cat.name}</h2>
+                    <div className="space-y-4">
+                      {catProducts.map((product: any) => (
+                        <div key={product.id} className="flex gap-4 bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
+                          <div className="w-24 h-24 flex-shrink-0 bg-gray-200 rounded-xl overflow-hidden flex items-center justify-center text-gray-400 text-xs">
+                            {product.imageUrl ? <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" /> : "Sem foto"}
+                          </div>
+                          <div className="flex-1 flex flex-col justify-between">
+                            <div>
+                              <div className="flex justify-between items-start">
+                                <h3 className="font-bold text-gray-900 leading-tight pr-2">{product.name}</h3>
+                                <span className="font-bold text-gray-900 whitespace-nowrap">R$ {product.price.toFixed(2)}</span>
+                              </div>
+                              {product.description && <p className="text-xs text-gray-500 mt-1 line-clamp-2">{product.description}</p>}
+                            </div>
+                            <div className="flex justify-between items-center mt-2">
+                              <button onClick={() => addToCart(product)} className="bg-green-700 text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-green-800 transition-colors">
+                                Adicionar
+                              </button>
+                              <button onClick={() => addToCart(product)} className="w-7 h-7 bg-green-700 text-white rounded-lg flex items-center justify-center hover:bg-green-800 transition-colors">
+                                <Plus size={16} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Floating Checkout Button */}
@@ -292,14 +301,20 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
       )}
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center max-w-md mx-auto z-20">
-        <button onClick={() => setViewMode("home")} className="text-green-700 flex flex-col items-center gap-1">
+      <nav className={`fixed bottom-0 left-0 right-0 border-t px-6 py-3 flex justify-between items-center max-w-md mx-auto z-20 ${viewMode === 'home' ? 'bg-[#2A0000] border-red-900/50' : 'bg-white border-gray-200'}`}>
+        <button onClick={() => setViewMode("home")} className={`${viewMode === 'home' ? 'text-yellow-500' : 'text-gray-400 hover:text-gray-900'} transition-colors flex flex-col items-center gap-1`}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </button>
-        <button onClick={() => searchInputRef.current?.focus()} className="text-gray-400 hover:text-gray-900 transition-colors flex flex-col items-center gap-1">
+        <button 
+          onClick={() => {
+            if (viewMode === 'home') setViewMode('menu');
+            setTimeout(() => searchInputRef.current?.focus(), 100);
+          }} 
+          className={`${viewMode === 'home' ? 'text-white/50 hover:text-yellow-500' : 'text-gray-400 hover:text-gray-900'} transition-colors flex flex-col items-center gap-1`}
+        >
           <Search size={24} />
         </button>
-        <button onClick={handleOpenCheckout} className="relative text-gray-400 hover:text-gray-900 transition-colors flex flex-col items-center gap-1">
+        <button onClick={handleOpenCheckout} className={`relative ${viewMode === 'home' ? 'text-white/50 hover:text-yellow-500' : 'text-gray-400 hover:text-gray-900'} transition-colors flex flex-col items-center gap-1`}>
           <ShoppingCart size={24} />
           {cart.length > 0 && (
             <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
@@ -307,7 +322,7 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
             </span>
           )}
         </button>
-        <button onClick={() => alert("Área do Cliente: Em breve")} className="text-gray-400 hover:text-gray-900 transition-colors flex flex-col items-center gap-1">
+        <button onClick={() => alert("Área do Cliente: Em breve")} className={`${viewMode === 'home' ? 'text-white/50 hover:text-yellow-500' : 'text-gray-400 hover:text-gray-900'} transition-colors flex flex-col items-center gap-1`}>
           <User size={24} />
         </button>
       </nav>
@@ -317,7 +332,7 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
         <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4 max-w-md mx-auto">
           <div className="fixed inset-0 bg-gray-900/60 transition-opacity" onClick={() => setIsCheckoutModalOpen(false)}></div>
           
-          <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl transform transition-all w-full relative z-10 max-h-[90vh] flex flex-col">
+          <div className="bg-white text-gray-900 rounded-t-2xl sm:rounded-2xl shadow-2xl transform transition-all w-full relative z-10 max-h-[90vh] flex flex-col">
             <div className="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
               <h3 className="text-lg font-bold text-gray-900">Finalizar Pedido</h3>
               <button onClick={() => setIsCheckoutModalOpen(false)} className="bg-gray-100 p-1.5 rounded-full text-gray-500 hover:bg-gray-200">
