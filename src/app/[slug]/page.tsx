@@ -20,6 +20,7 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const [activeCategory, setActiveCategory] = useState<string>("Todos");
+  const [viewMode, setViewMode] = useState<"home" | "menu">("home");
 
   useEffect(() => {
     fetch("/api/menu/public")
@@ -99,6 +100,7 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
         setCustomerName("");
         setPhone("");
         setAddress("");
+        setViewMode("home");
       } else {
         alert(`Erro ao enviar pedido: ${responseData.error}`);
       }
@@ -121,16 +123,61 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
     return acc;
   }, {});
 
+  if (viewMode === "home") {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-red-900 to-black font-sans text-white relative max-w-md mx-auto shadow-2xl overflow-hidden flex flex-col items-center justify-center px-6">
+        
+        {/* Logo */}
+        <div className="w-56 h-56 mb-10 rounded-full overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)] border-4 border-yellow-500/20 bg-black flex items-center justify-center">
+          <img src="/logo.jpg" alt="Batata do Chef" className="w-full h-full object-cover" />
+        </div>
+
+        {/* Grid of Categories */}
+        <div className="grid grid-cols-2 gap-4 w-full max-w-sm relative z-10">
+          {["BATATA", "BEBIDAS", "ADICIONAIS", "SOBREMESA"].map((catName) => {
+            let icon = "🍟";
+            if (catName === "BEBIDAS") icon = "🥤";
+            if (catName === "ADICIONAIS") icon = "➕";
+            if (catName === "SOBREMESA") icon = "🍨";
+            
+            return (
+              <button
+                key={catName}
+                onClick={() => {
+                  setActiveCategory(catName);
+                  setViewMode("menu");
+                  window.scrollTo(0, 0);
+                }}
+                className="bg-gradient-to-b from-yellow-400 to-yellow-500 text-black p-6 rounded-2xl flex flex-col items-center justify-center gap-3 shadow-lg hover:scale-105 transition-transform active:scale-95 border-b-4 border-yellow-600"
+              >
+                <span className="text-4xl">{icon}</span>
+                <span className="font-extrabold text-[13px] tracking-wide">{catName}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Footer Info */}
+        <div className="mt-16 text-xs text-white/50 font-medium">
+          Powered by Anota AI - {restaurant?.name}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 pb-24 font-sans text-gray-900 relative max-w-md mx-auto shadow-2xl overflow-hidden">
       
       {/* Header */}
       <header className="px-5 pt-6 pb-2 bg-white sticky top-0 z-10 shadow-sm">
         <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#6a1b9a] rounded-full flex items-center justify-center text-white font-bold">
-              {restaurant.name.charAt(0)}
-            </div>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setViewMode("home")}
+              className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-700 hover:bg-gray-200 transition-colors"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
             <h1 className="text-xl font-bold">{restaurant.name}</h1>
           </div>
           <div className="flex items-center text-sm font-medium text-gray-600">
@@ -246,8 +293,8 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center max-w-md mx-auto z-20">
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-green-700 flex flex-col items-center gap-1">
-          <MenuIcon size={24} />
+        <button onClick={() => setViewMode("home")} className="text-green-700 flex flex-col items-center gap-1">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </button>
         <button onClick={() => searchInputRef.current?.focus()} className="text-gray-400 hover:text-gray-900 transition-colors flex flex-col items-center gap-1">
           <Search size={24} />
