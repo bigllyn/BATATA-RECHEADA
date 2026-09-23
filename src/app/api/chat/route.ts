@@ -9,14 +9,17 @@ export async function POST(req: NextRequest) {
   try {
     const { message, history } = await req.json();
 
+    const restaurantRes = await db.execute({ sql: 'SELECT name, slug FROM Restaurant WHERE id = ?', args: ['rest_1'] });
+    const restaurant = restaurantRes.rows[0] || { name: "Seu Restaurante", slug: "seu-restaurante" };
+
     const productsRes = await db.execute('SELECT p.name, p.description, p.price, c.name as categoryName FROM Product p JOIN Category c ON p.categoryId = c.id');
     const products = productsRes.rows;
     
-    let menuContext = "Você é o atendente virtual do restaurante Gourmet Bites. Seja educado, rápido e focado em vender.\n\nNOSSO CARDÁPIO ATUAL:\n";
+    let menuContext = `Você é o atendente virtual do restaurante ${restaurant.name}. Seja educado, rápido e focado em vender.\n\nNOSSO CARDÁPIO ATUAL:\n`;
     for (const p of products) {
       menuContext += `- ${p.name} (${p.categoryName}): R$ ${Number(p.price).toFixed(2)}. ${p.description || ''}\n`;
     }
-    menuContext += "\nRegras: 1. Responda de forma curta como no WhatsApp. 2. Se o cliente quiser pedir, diga que ele pode pedir pelo link: http://localhost:3000/gourmet-bites ou você mesmo pode anotar. 3. Sugira sempre um item a mais (upsell).";
+    menuContext += `\nRegras: 1. Responda de forma curta como no WhatsApp. 2. Se o cliente quiser pedir, diga que ele pode pedir pelo link do cardápio digital. 3. Sugira sempre um item a mais (upsell).`;
 
     try {
       const response = await ai.models.generateContent({
