@@ -2,16 +2,21 @@
 
 import { useState } from "react";
 import { ExternalLink } from "lucide-react";
+import { toggleStoreStatus } from "../actions";
 
-export default function StoreStatusHeader() {
-  const [isOpen, setIsOpen] = useState(true);
+export default function StoreStatusHeader({ initialIsOpen }: { initialIsOpen: boolean }) {
+  const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleStatus = async () => {
     setIsLoading(true);
-    // In a real app, send API request to update DB
-    await new Promise(r => setTimeout(r, 600)); 
-    setIsOpen(!isOpen);
+    const newStatus = !isOpen;
+    const res = await toggleStoreStatus(newStatus);
+    if (res.success) {
+      setIsOpen(newStatus);
+    } else {
+      alert("Erro ao alterar o status da loja.");
+    }
     setIsLoading(false);
   };
 

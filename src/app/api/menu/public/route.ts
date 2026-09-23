@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const restaurantRes = await db.execute({ sql: 'SELECT name, slug, pixKey FROM Restaurant WHERE id = ?', args: ['rest_1'] });
+    const restaurantRes = await db.execute({ sql: 'SELECT name, slug, pixKey, isOpen FROM Restaurant WHERE id = ?', args: ['rest_1'] });
     const restaurant = restaurantRes.rows[0];
 
     const categoriesRes = await db.execute({

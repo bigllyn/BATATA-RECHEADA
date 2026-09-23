@@ -1,5 +1,6 @@
 import Link from "next/link";
 import StoreStatusHeader from "./components/StoreStatusHeader";
+import db from "@/lib/db";
 import { 
   LayoutDashboard, 
   ShoppingBag, 
@@ -8,11 +9,14 @@ import {
   LogOut 
 } from "lucide-react";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const res = await db.execute({ sql: 'SELECT isOpen FROM Restaurant WHERE id = ?', args: ['rest_1'] });
+  const isOpen = res.rows.length > 0 ? Boolean(res.rows[0].isOpen) : true;
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
@@ -57,7 +61,7 @@ export default function DashboardLayout({
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        <StoreStatusHeader />
+        <StoreStatusHeader initialIsOpen={isOpen} />
         <main className="p-8">
           {children}
         </main>

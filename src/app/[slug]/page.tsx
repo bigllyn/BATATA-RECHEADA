@@ -30,6 +30,10 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
   }, []);
 
   const addToCart = (product: any) => {
+    if (storeData?.restaurant?.isOpen === 0) {
+      alert("Nossa loja está fechada no momento. Volte mais tarde!");
+      return;
+    }
     setCart([...cart, product]);
   };
 
@@ -56,6 +60,10 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
 
   const handleOpenCheckout = () => {
     if (cart.length === 0) return;
+    if (storeData?.restaurant?.isOpen === 0) {
+      alert("Nossa loja está fechada no momento. Volte mais tarde!");
+      return;
+    }
     setIsCheckoutModalOpen(true);
   };
 
@@ -165,10 +173,16 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
         {viewMode === "home" ? (
           <div className="w-full flex flex-col items-center px-4 pt-12 pb-8">
             {/* Logo */}
-            <div className="w-64 h-64 sm:w-72 sm:h-72 mb-10 flex items-center justify-center drop-shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className="w-64 h-64 sm:w-72 sm:h-72 mb-6 flex items-center justify-center drop-shadow-[0_0_20px_rgba(0,0,0,0.5)]">
               <img src="/logo.jpg" alt="Batata do Chef" className="w-full h-full object-contain rounded-full border-2 border-yellow-500/20" />
             </div>
 
+            {restaurant.isOpen === 0 && (
+              <div className="bg-red-600 text-white font-black px-6 py-2 rounded-full border-2 border-red-800 shadow-[0_0_15px_rgba(220,38,38,0.5)] mb-8 animate-pulse uppercase tracking-wider text-sm">
+                Loja Fechada
+              </div>
+            )}
+            
             {/* Grid of Categories */}
             <div className="grid grid-cols-2 gap-4 w-full relative z-10 max-w-[400px]">
               {["BATATA", "BEBIDAS", "ADICIONAIS", "SOBREMESA"].map((catName) => {

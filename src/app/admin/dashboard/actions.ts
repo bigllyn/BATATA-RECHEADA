@@ -57,3 +57,16 @@ export async function getDashboardStats(startDateStr?: string, endDateStr?: stri
     return { success: false, stats: null, recentOrders: [] };
   }
 }
+
+export async function toggleStoreStatus(isOpen: boolean) {
+  try {
+    await db.execute({
+      sql: 'UPDATE Restaurant SET isOpen = ? WHERE id = ?',
+      args: [isOpen ? 1 : 0, 'rest_1']
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to toggle store status", error);
+    return { success: false };
+  }
+}
