@@ -124,22 +124,22 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
   }, {});
 
   return (
-    <div className={`min-h-screen pb-24 font-sans relative w-full md:max-w-md mx-auto shadow-2xl overflow-hidden ${viewMode === 'home' ? 'bg-gradient-to-b from-[#4A0000] to-[#110000] text-white' : 'bg-gray-50 text-gray-900'}`}>
+    <div className="min-h-screen pb-24 font-sans relative w-full md:max-w-md mx-auto shadow-2xl overflow-hidden bg-gradient-to-b from-[#4A0000] to-[#110000] text-white">
       
       {/* Header - Only in menu mode */}
       {viewMode === "menu" && (
-        <header className="px-5 pt-6 pb-2 bg-white sticky top-0 z-10 shadow-sm">
+        <header className="px-5 pt-6 pb-2 bg-[#3A0000]/95 backdrop-blur-md sticky top-0 z-20 shadow-xl border-b border-white/10">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => setViewMode("home")}
-                className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-700 hover:bg-gray-200 transition-colors"
+                className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               </button>
-              <h1 className="text-xl font-bold">{restaurant.name}</h1>
+              <h1 className="text-xl font-bold text-white">{restaurant.name}</h1>
             </div>
-            <div className="flex items-center text-sm font-medium text-gray-600">
+            <div className="flex items-center text-sm font-medium text-white/80">
               <MapPin size={16} className="mr-1" />
               Delivery
             </div>
@@ -148,12 +148,12 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
           {/* Search Bar */}
           <div className="relative mb-2">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search size={18} className="text-gray-400" />
+              <Search size={18} className="text-white/50" />
             </div>
             <input
               ref={searchInputRef}
               type="text"
-              className="block w-full pl-10 pr-3 py-2.5 border-none rounded-xl leading-5 bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#6a1b9a] sm:text-sm transition-all"
+              className="block w-full pl-10 pr-3 py-2.5 border border-white/20 rounded-xl leading-5 bg-black/30 placeholder-white/50 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 sm:text-sm transition-all shadow-inner"
               placeholder="Buscar pratos..."
             />
           </div>
@@ -209,17 +209,17 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
         ) : (
           <div className="w-full">
             {/* Categories Horizontal */}
-            <div className="px-5 mb-6 mt-4 overflow-x-auto no-scrollbar sticky top-[108px] bg-gray-50 z-10 py-2 border-b border-gray-200">
+            <div className="px-5 mb-6 mt-4 overflow-x-auto no-scrollbar sticky top-[108px] bg-[#3A0000]/95 backdrop-blur-md z-10 py-2 border-b border-white/10 shadow-lg">
               <div className="flex gap-6">
                 <button 
                   onClick={() => {
                     setActiveCategory("Todos");
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className={`flex flex-col items-center gap-2 min-w-max transition-opacity ${activeCategory === "Todos" ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+                  className={`flex flex-col items-center gap-2 min-w-max transition-opacity ${activeCategory === "Todos" ? 'opacity-100 text-yellow-400' : 'opacity-60 text-white hover:opacity-100'}`}
                 >
                   <span className="text-2xl">📋</span>
-                  <span className={`text-sm ${activeCategory === "Todos" ? 'font-bold border-b-2 border-black pb-1' : 'font-medium pb-1'}`}>Todos</span>
+                  <span className={`text-sm ${activeCategory === "Todos" ? 'font-bold border-b-2 border-yellow-400 pb-1' : 'font-medium pb-1'}`}>Todos</span>
                 </button>
                 {categories.map((cat: any) => (
                   <button 
@@ -228,10 +228,10 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
                       setActiveCategory(cat.name);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className={`flex flex-col items-center gap-2 min-w-max transition-opacity ${activeCategory === cat.name ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+                    className={`flex flex-col items-center gap-2 min-w-max transition-opacity ${activeCategory === cat.name ? 'opacity-100 text-yellow-400' : 'opacity-60 text-white hover:opacity-100'}`}
                   >
                     <span className="text-2xl">{cat.icon || '🍽️'}</span>
-                    <span className={`text-sm ${activeCategory === cat.name ? 'font-bold border-b-2 border-black pb-1' : 'font-medium pb-1'}`}>{cat.name}</span>
+                    <span className={`text-sm ${activeCategory === cat.name ? 'font-bold border-b-2 border-yellow-400 pb-1' : 'font-medium pb-1'}`}>{cat.name}</span>
                   </button>
                 ))}
               </div>
@@ -239,7 +239,7 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
 
             {/* Menu Items */}
             <div className="px-5 space-y-8">
-              {products.length === 0 && <p className="text-gray-500 text-sm">Nenhum produto cadastrado.</p>}
+              {products.length === 0 && <p className="text-white/50 text-sm">Nenhum produto cadastrado.</p>}
 
               {categories.map((cat: any) => {
                 if (activeCategory !== "Todos" && activeCategory !== cat.name) return null;
@@ -249,27 +249,27 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
 
                 return (
                   <div key={cat.id} id={`category-${cat.id}`} className="scroll-mt-40">
-                    <h2 className="text-xl font-bold mb-4 text-gray-900">{cat.name}</h2>
+                    <h2 className="text-2xl font-black mb-4 text-yellow-400 tracking-tight">{cat.name}</h2>
                     <div className="space-y-4">
                       {catProducts.map((product: any) => (
-                        <div key={product.id} className="flex gap-4 bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
-                          <div className="w-24 h-24 flex-shrink-0 bg-gray-200 rounded-xl overflow-hidden flex items-center justify-center text-gray-400 text-xs">
+                        <div key={product.id} className="flex gap-4 bg-black/40 p-3 rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.3)] border border-white/10 backdrop-blur-sm">
+                          <div className="w-28 h-28 flex-shrink-0 bg-white/5 rounded-xl overflow-hidden flex items-center justify-center text-white/30 text-xs border border-white/5">
                             {product.imageUrl ? <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" /> : "Sem foto"}
                           </div>
                           <div className="flex-1 flex flex-col justify-between">
                             <div>
                               <div className="flex justify-between items-start">
-                                <h3 className="font-bold text-gray-900 leading-tight pr-2">{product.name}</h3>
-                                <span className="font-bold text-gray-900 whitespace-nowrap">R$ {product.price.toFixed(2)}</span>
+                                <h3 className="font-bold text-white leading-tight pr-2">{product.name}</h3>
+                                <span className="font-extrabold text-yellow-400 whitespace-nowrap">R$ {product.price.toFixed(2)}</span>
                               </div>
-                              {product.description && <p className="text-xs text-gray-500 mt-1 line-clamp-2">{product.description}</p>}
+                              {product.description && <p className="text-xs text-white/60 mt-1 line-clamp-2">{product.description}</p>}
                             </div>
                             <div className="flex justify-between items-center mt-2">
-                              <button onClick={() => addToCart(product)} className="bg-green-700 text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-green-800 transition-colors">
+                              <button onClick={() => addToCart(product)} className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-black text-xs font-bold px-4 py-1.5 rounded-full hover:brightness-110 transition-all shadow-md shadow-yellow-500/20">
                                 Adicionar
                               </button>
-                              <button onClick={() => addToCart(product)} className="w-7 h-7 bg-green-700 text-white rounded-lg flex items-center justify-center hover:bg-green-800 transition-colors">
-                                <Plus size={16} />
+                              <button onClick={() => addToCart(product)} className="w-8 h-8 bg-gradient-to-r from-yellow-500 to-yellow-400 text-black rounded-lg flex items-center justify-center hover:brightness-110 transition-all shadow-md shadow-yellow-500/20">
+                                <Plus size={16} strokeWidth={3} />
                               </button>
                             </div>
                           </div>
@@ -289,10 +289,10 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
         <div className="fixed bottom-20 left-0 right-0 px-5 flex justify-center max-w-md mx-auto animate-in slide-in-from-bottom-10 fade-in duration-300 z-30">
           <button 
             onClick={handleOpenCheckout}
-            className="bg-green-700 text-white flex items-center justify-between px-6 w-full max-w-[90%] py-3.5 rounded-full font-bold shadow-xl shadow-green-900/20 hover:bg-green-800 transition-transform active:scale-95"
+            className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-black flex items-center justify-between px-6 w-full max-w-[90%] py-3.5 rounded-full font-bold shadow-[0_10px_25px_rgba(234,179,8,0.3)] hover:scale-105 transition-transform active:scale-95"
           >
             <div className="flex items-center gap-2">
-              <ShoppingCart size={18} />
+              <ShoppingCart size={18} strokeWidth={2.5} />
               <span>Ver Carrinho ({cart.length})</span>
             </div>
             <span>R$ {total.toFixed(2)}</span>
@@ -301,97 +301,96 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
       )}
 
       {/* Bottom Navigation */}
-      <nav className={`fixed bottom-0 left-0 right-0 border-t px-6 py-3 flex justify-between items-center max-w-md mx-auto z-20 ${viewMode === 'home' ? 'bg-[#2A0000] border-red-900/50' : 'bg-white border-gray-200'}`}>
-        <button onClick={() => setViewMode("home")} className={`${viewMode === 'home' ? 'text-yellow-500' : 'text-gray-400 hover:text-gray-900'} transition-colors flex flex-col items-center gap-1`}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <nav className="fixed bottom-0 left-0 right-0 border-t px-6 py-3 flex justify-between items-center w-full md:max-w-md mx-auto z-40 bg-[#2A0000] border-red-900/50">
+        <button onClick={() => setViewMode("home")} className={`${viewMode === 'home' ? 'text-yellow-500' : 'text-white/50 hover:text-yellow-400'} transition-colors flex flex-col items-center gap-1`}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </button>
         <button 
           onClick={() => {
             if (viewMode === 'home') setViewMode('menu');
             setTimeout(() => searchInputRef.current?.focus(), 100);
           }} 
-          className={`${viewMode === 'home' ? 'text-white/50 hover:text-yellow-500' : 'text-gray-400 hover:text-gray-900'} transition-colors flex flex-col items-center gap-1`}
+          className={`${viewMode === 'home' ? 'text-white/50 hover:text-yellow-500' : 'text-white/50 hover:text-yellow-400'} transition-colors flex flex-col items-center gap-1`}
         >
-          <Search size={24} />
+          <Search size={24} strokeWidth={2.5} />
         </button>
-        <button onClick={handleOpenCheckout} className={`relative ${viewMode === 'home' ? 'text-white/50 hover:text-yellow-500' : 'text-gray-400 hover:text-gray-900'} transition-colors flex flex-col items-center gap-1`}>
-          <ShoppingCart size={24} />
+        <button onClick={handleOpenCheckout} className={`relative ${viewMode === 'home' ? 'text-white/50 hover:text-yellow-500' : 'text-white/50 hover:text-yellow-400'} transition-colors flex flex-col items-center gap-1`}>
+          <ShoppingCart size={24} strokeWidth={2.5} />
           {cart.length > 0 && (
-            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
+             <span className="absolute -top-2 -right-2 bg-yellow-500 text-black text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-extrabold shadow-sm">
               {cart.length}
             </span>
           )}
         </button>
-        <button onClick={() => alert("Área do Cliente: Em breve")} className={`${viewMode === 'home' ? 'text-white/50 hover:text-yellow-500' : 'text-gray-400 hover:text-gray-900'} transition-colors flex flex-col items-center gap-1`}>
-          <User size={24} />
+        <button onClick={() => alert("Área do Cliente: Em breve")} className={`${viewMode === 'home' ? 'text-white/50 hover:text-yellow-500' : 'text-white/50 hover:text-yellow-400'} transition-colors flex flex-col items-center gap-1`}>
+          <User size={24} strokeWidth={2.5} />
         </button>
       </nav>
 
       {/* Checkout Modal */}
       {isCheckoutModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4 max-w-md mx-auto">
-          <div className="fixed inset-0 bg-gray-900/60 transition-opacity" onClick={() => setIsCheckoutModalOpen(false)}></div>
+        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4 w-full md:max-w-md mx-auto">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onClick={() => setIsCheckoutModalOpen(false)}></div>
           
-          <div className="bg-white text-gray-900 rounded-t-2xl sm:rounded-2xl shadow-2xl transform transition-all w-full relative z-10 max-h-[90vh] flex flex-col">
-            <div className="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
-              <h3 className="text-lg font-bold text-gray-900">Finalizar Pedido</h3>
-              <button onClick={() => setIsCheckoutModalOpen(false)} className="bg-gray-100 p-1.5 rounded-full text-gray-500 hover:bg-gray-200">
+          <div className="bg-gradient-to-b from-[#3A0000] to-[#110000] border border-white/10 text-white rounded-t-3xl sm:rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] transform transition-all w-full relative z-10 max-h-[90vh] flex flex-col">
+            <div className="px-5 py-4 border-b border-white/10 flex justify-between items-center bg-white/5 rounded-t-3xl">
+              <h3 className="text-xl font-bold text-yellow-400">Finalizar Pedido</h3>
+              <button onClick={() => setIsCheckoutModalOpen(false)} className="bg-black/30 p-1.5 rounded-full text-white hover:bg-white/10 transition-colors">
                 <X size={20} />
               </button>
             </div>
             
-            <div className="p-5 overflow-y-auto flex-1">
-              <form id="checkout-form" onSubmit={submitOrder} className="space-y-5">
+            <div className="p-5 overflow-y-auto flex-1 no-scrollbar">
+              <form id="checkout-form" onSubmit={submitOrder} className="space-y-6">
                 
                 {/* Resumo */}
                 <div>
-                  <h4 className="font-bold text-sm text-gray-500 uppercase tracking-wider mb-2">Resumo</h4>
+                  <h4 className="font-bold text-sm text-yellow-500/80 uppercase tracking-wider mb-2">Resumo do Pedido</h4>
                   
-                  <div className="bg-gray-50 rounded-lg border border-gray-100 p-2 space-y-2 mb-2">
+                  <div className="bg-black/40 rounded-xl border border-white/10 p-2 space-y-2 mb-2">
                     {Object.values(cart.reduce((acc, item) => {
                       acc[item.id] = acc[item.id] || { ...item, quantity: 0 };
                       acc[item.id].quantity += 1;
                       return acc;
                     }, {} as any)).map((item: any, idx) => (
-                      <div key={idx} className="flex justify-between items-center text-sm bg-white p-2 rounded border border-gray-100 shadow-sm">
+                      <div key={idx} className="flex justify-between items-center text-sm bg-white/5 p-3 rounded-lg border border-white/5 shadow-sm">
                         
                         {/* Ações de Quantidade */}
-                        <div className="flex items-center gap-2 mr-3">
-                          <button type="button" onClick={() => decreaseQuantity(item.id)} className="w-6 h-6 bg-red-100 text-red-600 rounded-md flex items-center justify-center font-bold hover:bg-red-200">-</button>
-                          <span className="font-bold text-gray-700 min-w-[12px] text-center">{item.quantity}</span>
-                          <button type="button" onClick={() => addToCart(item)} className="w-6 h-6 bg-green-100 text-green-700 rounded-md flex items-center justify-center font-bold hover:bg-green-200">+</button>
+                        <div className="flex items-center gap-2 mr-3 bg-black/50 rounded-lg p-1">
+                          <button type="button" onClick={() => decreaseQuantity(item.id)} className="w-7 h-7 bg-white/10 text-white rounded-md flex items-center justify-center font-bold hover:bg-red-500/80 transition-colors">-</button>
+                          <span className="font-bold text-white min-w-[12px] text-center">{item.quantity}</span>
+                          <button type="button" onClick={() => addToCart(item)} className="w-7 h-7 bg-yellow-500/20 text-yellow-400 rounded-md flex items-center justify-center font-bold hover:bg-yellow-500 hover:text-black transition-colors">+</button>
                         </div>
                         
                         {/* Nome do Produto */}
-                        <div className="flex-1 font-medium text-gray-800 leading-snug">
+                        <div className="flex-1 font-bold text-white/90 leading-snug">
                           {item.name}
                         </div>
                         
                         {/* Preço e Lixeira */}
                         <div className="flex items-center gap-3">
-                          <span className="text-gray-600 font-bold whitespace-nowrap">R$ {(item.price * item.quantity).toFixed(2)}</span>
-                          <button type="button" onClick={() => removeFromCart(item.id)} className="text-gray-400 hover:text-red-500 transition-colors">
-                            <X size={16} className="opacity-70" />
+                          <span className="text-yellow-400 font-extrabold whitespace-nowrap">R$ {(item.price * item.quantity).toFixed(2)}</span>
+                          <button type="button" onClick={() => removeFromCart(item.id)} className="text-white/40 hover:text-red-500 transition-colors p-1">
+                            <X size={18} strokeWidth={3} />
                           </button>
                         </div>
-
                       </div>
                     ))}
                     
                     {cart.length === 0 && (
-                      <div className="text-center py-4 text-gray-500 text-sm">Seu carrinho está vazio.</div>
+                      <div className="text-center py-4 text-white/50 text-sm">Seu carrinho está vazio.</div>
                     )}
                   </div>
 
-                  <div className="flex justify-between items-center p-2 font-bold">
-                    <span className="text-gray-700">Total a pagar:</span>
-                    <span className="text-green-700 text-xl">R$ {total.toFixed(2)}</span>
+                  <div className="flex justify-between items-center p-3 font-bold bg-black/40 rounded-xl border border-white/10">
+                    <span className="text-white/80">Total a pagar:</span>
+                    <span className="text-yellow-400 text-2xl font-black">R$ {total.toFixed(2)}</span>
                   </div>
                 </div>
 
                 {/* Dados de Entrega */}
                 <div>
-                  <h4 className="font-bold text-sm text-gray-500 uppercase tracking-wider mb-2">Entrega</h4>
+                  <h4 className="font-bold text-sm text-yellow-500/80 uppercase tracking-wider mb-2">Dados da Entrega</h4>
                   <div className="space-y-3">
                     <input 
                       type="text" 
@@ -399,7 +398,7 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
                       required 
                       value={customerName}
                       onChange={e => setCustomerName(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6a1b9a]"
+                      className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-white placeholder-white/30"
                     />
                     <input 
                       type="tel" 
@@ -407,66 +406,66 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
                       required 
                       value={phone}
                       onChange={e => setPhone(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6a1b9a]"
+                      className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-white placeholder-white/30"
                     />
                     <textarea 
-                      placeholder="Endereço de Entrega Completo (Rua, Número, Bairro, Referência)" 
+                      placeholder="Endereço Completo (Rua, Número, Bairro, Ref.)" 
                       required 
                       rows={3}
                       value={address}
                       onChange={e => setAddress(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6a1b9a]"
+                      className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-white placeholder-white/30 resize-none"
                     ></textarea>
                   </div>
                 </div>
 
                 {/* Pagamento */}
                 <div>
-                  <h4 className="font-bold text-sm text-gray-500 uppercase tracking-wider mb-2">Pagamento</h4>
+                  <h4 className="font-bold text-sm text-yellow-500/80 uppercase tracking-wider mb-2">Forma de Pagamento</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <button 
                       type="button"
                       onClick={() => setPaymentMethod("Pix")}
-                      className={`py-3 px-4 rounded-xl font-bold border-2 transition-all ${paymentMethod === 'Pix' ? 'border-[#6a1b9a] bg-purple-50 text-[#6a1b9a]' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                      className={`py-3 px-4 rounded-xl font-bold border-2 transition-all ${paymentMethod === 'Pix' ? 'border-yellow-400 bg-yellow-400/10 text-yellow-400' : 'border-white/10 text-white/50 hover:bg-white/5'}`}
                     >
                       Pix
                     </button>
                     <button 
                       type="button"
                       onClick={() => setPaymentMethod("Dinheiro")}
-                      className={`py-3 px-4 rounded-xl font-bold border-2 transition-all ${paymentMethod === 'Dinheiro' ? 'border-[#6a1b9a] bg-purple-50 text-[#6a1b9a]' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                      className={`py-3 px-4 rounded-xl font-bold border-2 transition-all ${paymentMethod === 'Dinheiro' ? 'border-yellow-400 bg-yellow-400/10 text-yellow-400' : 'border-white/10 text-white/50 hover:bg-white/5'}`}
                     >
                       Dinheiro/Cartão
                     </button>
                   </div>
                 </div>
 
-                {/* Info Pix */}
+                {/* Info Pagamento */}
                 {paymentMethod === "Pix" && (
-                  <div className="bg-green-50 border border-green-200 p-4 rounded-xl">
-                    <p className="text-sm text-green-800 font-medium mb-1">Pague via Pix usando a chave:</p>
-                    <p className="font-bold text-lg text-green-900">{restaurant.pixKey || "Chave não configurada na retaguarda"}</p>
-                    <p className="text-xs text-green-700 mt-2">O comprovante poderá ser solicitado na entrega.</p>
+                  <div className="bg-yellow-500/10 border border-yellow-500/30 p-4 rounded-xl">
+                    <p className="text-sm text-yellow-500/80 font-medium mb-1">Pague via Pix usando a chave:</p>
+                    <p className="font-bold text-lg text-yellow-400">{restaurant.pixKey || "Chave não configurada"}</p>
+                    <p className="text-xs text-yellow-500/60 mt-2">O comprovante poderá ser solicitado na entrega.</p>
                   </div>
                 )}
                 
                 {paymentMethod === "Dinheiro" && (
-                  <div className="bg-orange-50 border border-orange-200 p-4 rounded-xl">
-                    <p className="text-sm text-orange-800 font-medium">O motoboy levará a maquininha. Você também pode pagar em dinheiro trocado.</p>
+                  <div className="bg-white/5 border border-white/10 p-4 rounded-xl">
+                    <p className="text-sm text-white/70 font-medium">O motoboy levará a maquininha. Você também pode pagar em dinheiro trocado.</p>
                   </div>
                 )}
 
               </form>
             </div>
             
-            <div className="p-5 border-t border-gray-100 bg-white">
+            <div className="p-5 border-t border-white/10 bg-black/40 rounded-b-3xl">
               <button 
                 type="submit" 
                 form="checkout-form"
                 disabled={isCheckingOut}
-                className="w-full bg-[#6a1b9a] text-white py-4 rounded-xl font-bold text-lg hover:bg-purple-800 transition-colors disabled:opacity-70 flex justify-center items-center gap-2 shadow-lg shadow-purple-900/20"
+                className="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 text-black py-4 rounded-xl font-black text-lg hover:brightness-110 transition-all disabled:opacity-70 flex justify-center items-center gap-2 shadow-[0_4px_20px_rgba(234,179,8,0.3)]"
               >
-                {isCheckingOut ? "Enviando Pedido..." : "Confirmar Pedido"}
+                {isCheckingOut ? "Enviando Pedido..." : "CONFIRMAR PEDIDO"}
               </button>
             </div>
           </div>
