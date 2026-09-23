@@ -39,7 +39,16 @@ export async function getSettings() {
       sql: 'SELECT pixKey, name, description FROM Restaurant WHERE id = ?',
       args: ['rest_1']
     });
-    return res.rows[0] || { pixKey: "", name: "", description: "" };
+    
+    if (res.rows.length > 0) {
+      const row = res.rows[0];
+      return {
+        pixKey: String(row.pixKey || ""),
+        name: String(row.name || ""),
+        description: String(row.description || "")
+      };
+    }
+    return { pixKey: "", name: "", description: "" };
   } catch (error) {
     return { pixKey: "", name: "", description: "" };
   }
