@@ -23,7 +23,7 @@ export default function DigitalMenu({ params }: { params: Promise<{ slug: string
   const [viewMode, setViewMode] = useState<"home" | "menu">("home");
 
   useEffect(() => {
-    fetch("/api/menu/public")
+    fetch(`/api/menu/public?t=${new Date().getTime()}`)
       .then(res => res.json())
       .then(data => setStoreData(data))
       .catch(console.error);
